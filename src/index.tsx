@@ -2,13 +2,13 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from "react-router-dom";
 import Home from './routes/Home';
 import QueryGen from './routes/QueryGen';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: "/",
     element:<Home />,
