@@ -5,7 +5,7 @@
 @layer base {
   body{
     @apply bg-gray-800;
-    @apply text-gray-200;
+    @apply text-gray-300;
   }
 
   h1 {
@@ -13,5 +13,14 @@
   }
   h2 {
     @apply text-lg;
+  }
+
+  input {
+    @apply p-2;
+    @apply my-2;
+    @apply text-center;
+    @apply rounded-full;
+    @apply bg-gray-300;
+    @apply text-gray-800;
   }
 }
