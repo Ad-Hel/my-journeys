@@ -50,7 +50,7 @@ const getJourneys = async (plannedJourneys: QueryJourney[]) => {
 
 
 const Home = () => {
-  const [journeys, setJourneys] = useState([])
+  const [journeys, setJourneys] = useState<VehicleJourney[]>([])
 
   useEffect(()=>{
     const fetchJourneys = async() => {
@@ -58,17 +58,6 @@ const Home = () => {
       setJourneys(res.vehicle_journeys)
     };
     fetchJourneys()
-  
-    // if (fetchedJourneys){
-    //   // @ts-expect-error
-    //   const sortJourneys = fetchedJourneys.vehicle_journeys.sort(
-    //     (a: VehicleJourney, b: VehicleJourney) =>
-    //       parseInt(a.calendars[0].active_periods[0].begin, 10) -
-    //       parseInt(b.calendars[0].active_periods[0].begin, 10)
-    //       )
-    //   console.log(sortJourneys)
-    //   setJourneys(sortJourneys)
-    // }
   }, [])
 
   return (
@@ -78,7 +67,6 @@ const Home = () => {
       </Link>
       {journeys.length > 0 &&
         journeys.map((journey) => (
-          // @ts-expect-error
           <Journey key={journey.id} journey={journey} />
         ))}
     </Layout>

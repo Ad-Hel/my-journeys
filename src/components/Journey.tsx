@@ -1,5 +1,4 @@
 export interface VehicleJourney {
-  journey: {
     codes: {
       type: string;
       value: string;
@@ -14,6 +13,9 @@ export interface VehicleJourney {
     stop_times: VehicleJourneyStop[];
     id: string;
   };
+
+interface Props {
+  journey: VehicleJourney
 }
 
 interface VehicleJourneyStop {
@@ -23,7 +25,7 @@ interface VehicleJourneyStop {
   arrival_time: string;
 }
 
-const Journey = ({ journey }: VehicleJourney) => {
+const Journey = ({ journey }: Props) => {
   console.log(journey);
   const formatTime = (time: string) => {
     console.log(time)
