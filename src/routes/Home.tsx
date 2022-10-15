@@ -3,6 +3,7 @@ import plannedJourneys from "../assets/plannedJourneys.json";
 import Journey from "../components/Journey";
 import Layout from "../components/Layout";
 import { VehicleJourney } from "../components/Journey";
+import { Link } from "react-router-dom";
 interface QueryJourney {
   headsign: string;
   date: string;
@@ -27,7 +28,7 @@ const getJourneys = async (plannedJourneys: QueryJourney[]) => {
   const payload = {
     trains: makeQuery(plannedJourneys)
   } 
-  console.log(JSON.stringify(payload))
+  console.log(`payload: ${JSON.stringify(payload)}`)
   const headers = new Headers({
     "Content-Type": "application/json"
   })
@@ -36,9 +37,14 @@ const getJourneys = async (plannedJourneys: QueryJourney[]) => {
     headers: headers,
     body: JSON.stringify(payload),
   }
-  const response = await fetch('https://europe-west3-my-journeys-365118.cloudfunctions.net/get-journeys', init)
-  const data = await response.json()
-  return await data
+  try {
+    const response = await fetch('https://europe-west3-my-journeys-365118.cloudfunctions.net/get-journeys', init)
+    const data = await response.json()
+    return data
+  } catch(error){
+    console.log(error)
+    return null
+  }
 }
 
 
@@ -47,24 +53,29 @@ const Home = () => {
   const [journeys, setJourneys] = useState([])
 
   useEffect(()=>{
-    const fetchJourneys = async() => await getJourneys(plannedJourneys);
-    const fetchedJourneys = fetchJourneys()
-    console.log(fetchedJourneys)
-    // @ts-expect-error
-    const sortJourneys = fetchedJourneys.vehicle_journeys.sort(
-      (a: VehicleJourney, b: VehicleJourney) =>
-        parseInt(a.calendars[0].active_periods[0].begin, 10) -
-        parseInt(b.calendars[0].active_periods[0].begin, 10)
-        )
-    console.log(sortJourneys)
-    setJourneys(sortJourneys)
+    const fetchJourneys = async() => {
+      const res = await getJourneys(plannedJourneys)
+      setJourneys(res.vehicle_journeys)
+    };
+    fetchJourneys()
+  
+    // if (fetchedJourneys){
+    //   // @ts-expect-error
+    //   const sortJourneys = fetchedJourneys.vehicle_journeys.sort(
+    //     (a: VehicleJourney, b: VehicleJourney) =>
+    //       parseInt(a.calendars[0].active_periods[0].begin, 10) -
+    //       parseInt(b.calendars[0].active_periods[0].begin, 10)
+    //       )
+    //   console.log(sortJourneys)
+    //   setJourneys(sortJourneys)
+    // }
   }, [])
 
   return (
     <Layout>
-      <a href="/#/query-gen">
+      <Link to="/query-gen">
         <h1 className="text-xl font-bold mb-4">Prochains trajets</h1>
-      </a>
+      </Link>
       {journeys.length > 0 &&
         journeys.map((journey) => (
           // @ts-expect-error

@@ -1,26 +1,32 @@
 export interface VehicleJourney {
-  codes: {
-    type: string;
-    value: string;
-  }[];
-  name: string;
-  calendars: {
-    active_periods: {
-      begin: string;
-      end: string;
+  journey: {
+    codes: {
+      type: string;
+      value: string;
     }[];
-  }[];
-  stop_times: {
-    stop_point: {
-      name: string;
-    };
-    arrival_time: string;
-  }[];
-  id: string;
+    name: string;
+    calendars: {
+      active_periods: {
+        begin: string;
+        end: string;
+      }[];
+    }[];
+    stop_times: VehicleJourneyStop[];
+    id: string;
+  };
 }
 
-const Journey = (journey: VehicleJourney) => {
+interface VehicleJourneyStop {
+  stop_point: {
+    name: string;
+  };
+  arrival_time: string;
+}
+
+const Journey = ({ journey }: VehicleJourney) => {
+  console.log(journey);
   const formatTime = (time: string) => {
+    console.log(time)
     const hours = time.slice(0, 2);
     const minutes = time.slice(2, 4);
     return `${hours}:${minutes}`;
@@ -32,24 +38,42 @@ const Journey = (journey: VehicleJourney) => {
     return `${day}/${month}`;
   };
 
+  interface DisplayedJourneyStop {
+    name: string;
+    arrival_time: string;
+  }
+
+  const makeDisplayedSteps = (stops: VehicleJourneyStop[]) => {
+    const steps: DisplayedJourneyStop[] = [];
+    stops.forEach((stop) => {
+      steps.push({
+        name: stop?.stop_point?.name,
+        arrival_time: formatTime(stop?.arrival_time),
+      });
+    });
+    return steps;
+  };
+
+  const displayedJourney = {
+    date: formatDate(journey?.calendars[0]?.active_periods[0]?.begin),
+    departure: journey?.stop_times[0]?.stop_point?.name,
+    arrival:
+      journey?.stop_times[journey.stop_times.length - 1]?.stop_point?.name,
+    steps: makeDisplayedSteps(journey.stop_times),
+  };
+
   return (
-    <details
-      key={journey.id}
-      className="border border-2 border-grey p-4 rounded-xl my-2"
-    >
+    <details className="border border-2 border-grey p-4 rounded-xl my-2">
       <summary className=" marker:hidden list-none cursor-pointer">
         <h2 className="inline">
-          <span className="font-bold">
-            {formatDate(journey.calendars[0].active_periods[0].begin)} :{" "}
-          </span>
-          {journey.stop_times[0].stop_point.name} -{" "}
-          {journey.stop_times[journey.stop_times.length - 1].stop_point.name}
+          <span className="font-bold">{displayedJourney.date} : </span>
+          {displayedJourney.departure} - {displayedJourney.arrival}
         </h2>
       </summary>
       <ul className="mt-4 mb-2">
-        {journey.stop_times.map((stop) => (
-          <li key={stop.stop_point.name} className="mb-2">
-            {stop.stop_point.name} - {formatTime(stop.arrival_time)}
+        {displayedJourney.steps.map((stop) => (
+          <li key={stop?.name} className="mb-2">
+            {stop?.name} - {stop?.arrival_time}
           </li>
         ))}
       </ul>
