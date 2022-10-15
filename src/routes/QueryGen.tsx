@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
+import { Link } from "react-router-dom";
 import Layout from "../components/Layout";
 
 interface JourneyForm {
@@ -78,9 +79,9 @@ const QueryGen = () => {
 
   return (
     <Layout>
-      <a href="/#/">
+      <Link to="/">
         <h1>Query Generator</h1>
-      </a>
+      </Link>
       <button onClick={() => setNextMonthJourneys()}>
         Charger prochain mois
       </button>
