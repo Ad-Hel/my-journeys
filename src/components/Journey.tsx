@@ -65,7 +65,7 @@ const Journey = ({ journey }: Props) => {
   };
 
   return (
-    <details className="border border-2 border-grey p-4 rounded-xl my-2">
+    <details className="border-2 border-grey p-4 rounded-xl my-2">
       <summary className=" marker:hidden list-none cursor-pointer">
         <h2 className="inline">
           <span className="font-bold">{displayedJourney.date} : </span>
