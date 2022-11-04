@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 
 const usePlannedJourneys = () => {
     const getPlannedJourneys = async () => { 
-        const response = await fetch('my-journeys/data/plannedJourneys.json')
+        const response = await fetch('data/plannedJourneys.json')
         return response.json()
     }
     const { data, isLoading, isSuccess} = useQuery(['planned-journeys'], async () => await getPlannedJourneys())
