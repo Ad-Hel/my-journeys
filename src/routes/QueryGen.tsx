@@ -8,7 +8,7 @@ interface JourneyForm {
   date: string;
 }
 
-interface JourneyStored {
+export interface JourneyStored {
   headsign: string;
   date: string;
   slug: string;
